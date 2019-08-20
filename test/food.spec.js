@@ -36,9 +36,9 @@ describe('api', () => {
         expect(response.body[0].id).toBe(1)
         expect(response.body[0].name).toBe('Banana')
         expect(response.body[0].calories).toBe(150)
-        expect(response.body[0].id).toBe(2)
-        expect(response.body[0].name).toBe('Mint')
-        expect(response.body[0].calories).toBe(14)
+        expect(response.body[1].id).toBe(2)
+        expect(response.body[1].name).toBe('Mint')
+        expect(response.body[1].calories).toBe(14)
       })
     });
   });
