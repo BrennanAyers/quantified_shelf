@@ -1,6 +1,6 @@
 var shell = require('shelljs');
 var request = require("supertest");
-var app = require('./app');
+var app = require('../app');
 
 describe('api', () => {
   beforeAll(() => {
@@ -18,6 +18,9 @@ describe('api', () => {
     test('It can get a single food from the database', () => {
       return request(app).get('/api/v1/foods/1').then(response => {
         expect(response.statusCode).toBe(200)
+        expect(response.body.id).toBe(1)
+        expect(response.body.name).toBe('Banana')
+        expect(response.body.calories).toBe(150)
       })
     });
   });
