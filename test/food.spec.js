@@ -29,5 +29,17 @@ describe('api', () => {
         expect(response.body.calories).toBe(150)
       })
     });
+
+    test('It can get all foods from the database', async () =>{
+      await agent.get('/api/v1/foods').then(response => {
+        expect(response.statusCode).toBe(200)
+        expect(response.body[0].id).toBe(1)
+        expect(response.body[0].name).toBe('Banana')
+        expect(response.body[0].calories).toBe(150)
+        expect(response.body[0].id).toBe(2)
+        expect(response.body[0].name).toBe('Mint')
+        expect(response.body[0].calories).toBe(14)
+      })
+    });
   });
 });
