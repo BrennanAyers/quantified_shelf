@@ -53,15 +53,15 @@ describe('api', () => {
         })
     })
 
-    test('It can edit a food in the database'), () => {
+    test('It can edit a food in the database', () => {
       return request(app).patch('/api/v1/foods/1')
-        .send('name=Test&calories=100')
+        .send({name: 'Test', calories: 100})
         .then(response => {
           expect(response.statusCode).toBe(201)
-          expect(response.body.id).toBeGreaterThan(0)
+          expect(response.body.id).toBe(1)
           expect(response.body.name).toBe('Test')
           expect(response.body.calories).toBe(100)
         })
-      }
+      })
   });
 });

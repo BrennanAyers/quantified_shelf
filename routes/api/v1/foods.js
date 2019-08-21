@@ -45,4 +45,21 @@ router.post('/', function(req, res, next) {
   });
 });
 
+router.patch('/:id', function (req, res, next) {
+ Food.update(
+   {name: req.body.name, calories: req.body.calories},
+   {where: {id: req.params.id}})
+ .then(row => {
+   Food.findOne({where: {id: req.params.id}})
+   .then(food => {
+     res.setHeader('Content-Type', 'application/json');
+     res.status(201).send(JSON.stringify(food));
+   })
+ })
+ .catch(error => {
+   res.setHeader('Content-Type', 'application/json');
+   res.status(500).send({error});
+ });
+})
+
 module.exports = router;
