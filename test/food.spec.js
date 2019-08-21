@@ -62,7 +62,7 @@ describe('api', () => {
 
     test("It can't create a food in the database if missing parameters", () => {
       return request(app).post('/api/v1/foods')
-        .send('name=Test&calories=100')
+        .send('name=Test')
         .then(response => {
           expect(response.statusCode).toBe(500)
         })
