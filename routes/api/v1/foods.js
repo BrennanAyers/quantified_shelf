@@ -45,4 +45,20 @@ router.post('/', function(req, res, next) {
   });
 });
 
+router.delete('/:id', function(req, res, next) {
+  Food.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+  .then(food => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(204).send();
+  })
+  .catch(error => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(500).send({error});
+  });
+});
+
 module.exports = router;
