@@ -21,8 +21,8 @@ describe('api', () => {
   });
 
   describe('Test food path', () => {
-    test('It can get a single food from the database', async () => {
-       await agent.get('/api/v1/foods/1').then(response => {
+    test('It can get a single food from the database', () => {
+       return request(app).get('/api/v1/foods/1').then(response => {
         expect(response.statusCode).toBe(200)
         expect(response.body.id).toBe(1)
         expect(response.body.name).toBe('Banana')
@@ -30,8 +30,8 @@ describe('api', () => {
       })
     });
 
-    test('It can get all foods from the database', async () =>{
-      await agent.get('/api/v1/foods').then(response => {
+    test('It can get all foods from the database', () =>{
+      return request(app).get('/api/v1/foods').then(response => {
         expect(response.statusCode).toBe(200)
         expect(response.body[0].id).toBe(1)
         expect(response.body[0].name).toBe('Banana')
