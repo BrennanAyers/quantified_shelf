@@ -30,6 +30,18 @@ describe('api', () => {
       })
     });
 
+    test('It can get all foods from the database', () =>{
+      return request(app).get('/api/v1/foods').then(response => {
+        expect(response.statusCode).toBe(200)
+        expect(response.body[0].id).toBe(1)
+        expect(response.body[0].name).toBe('Banana')
+        expect(response.body[0].calories).toBe(150)
+        expect(response.body[1].id).toBe(2)
+        expect(response.body[1].name).toBe('Mint')
+        expect(response.body[1].calories).toBe(14)
+      })
+    });
+
     test('It can create a new food in the database', () => {
       return request(app).post('/api/v1/foods')
         .send('name=Test&calories=100')
