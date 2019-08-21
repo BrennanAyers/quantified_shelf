@@ -30,6 +30,12 @@ describe('api', () => {
       })
     });
 
+    test("It won't return a food if the id is invalid", () => {
+      return request(app).get('/api/v1/foods/500').then(response => {
+        expect(response.statusCode).toBe(500)
+      })
+    })
+
     test('It can get all foods from the database', () =>{
       return request(app).get('/api/v1/foods').then(response => {
         expect(response.statusCode).toBe(200)
