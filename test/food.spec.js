@@ -21,13 +21,24 @@ describe('api', () => {
   });
 
   describe('Test food path', () => {
-    test('It can get a single food from the database', async () => {
-       await agent.get('/api/v1/foods/1').then(response => {
+    test('It can get a single food from the database', () => {
+      return request(app).get('/api/v1/foods/1').then(response => {
         expect(response.statusCode).toBe(200)
         expect(response.body.id).toBe(1)
         expect(response.body.name).toBe('Banana')
         expect(response.body.calories).toBe(150)
       })
     });
+
+    test('It can create a new food in the database', () => {
+      return request(app).post('/api/v1/foods')
+        .send('name=Test&calories=100')
+        .then(response => {
+          expect(response.statusCode).toBe(201)
+          expect(response.body.id).toBeGreaterThan(0)
+          expect(response.body.name).toBe('Test')
+          expect(response.body.calories).toBe(100)
+        })
+    })
   });
 });
