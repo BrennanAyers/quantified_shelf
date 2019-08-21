@@ -1,6 +1,7 @@
 var shell = require('shelljs');
 var request = require("supertest");
 var app = require('../app');
+var Food = require('../models').Food
 
 describe('api', () => {
   beforeAll(() => {
@@ -51,6 +52,16 @@ describe('api', () => {
           expect(response.body.name).toBe('Test')
           expect(response.body.calories).toBe(100)
         })
+    })
+
+    test('It can delete an existing food in the database', () => {
+      return Food.create({name: 'Donut', calories: 1000, createdAt: new Date(), updatedAt: new Date()})
+      .then(food => {
+        return request(app).delete(`/api/v1/foods/${food.id}`)
+        .then(response => {
+          expect(response.statusCode).toBe(204)
+        })
+      })
     })
   });
 });
