@@ -31,6 +31,13 @@ describe('api', () => {
       })
     });
 
+    test("It won't return a food if the id is invalid", () => {
+      return request(app).get('/api/v1/foods/500').then(response => {
+        expect(response.statusCode).toBe(404)
+        expect(response.body.message).toBe('Food not found')
+      })
+    })
+
     test('It can get all foods from the database', () =>{
       return request(app).get('/api/v1/foods').then(response => {
         expect(response.statusCode).toBe(200)
@@ -53,6 +60,14 @@ describe('api', () => {
           expect(response.body.calories).toBe(100)
         })
     })
+
+    test("It can't create a food in the database if missing parameters", () => {
+      return request(app).post('/api/v1/foods')
+        .send('name=Test')
+        .then(response => {
+          expect(response.statusCode).toBe(500)
+        })
+      })
 
     test('It can delete an existing food in the database', () => {
       return Food.create({name: 'Donut', calories: 1000, createdAt: new Date(), updatedAt: new Date()})

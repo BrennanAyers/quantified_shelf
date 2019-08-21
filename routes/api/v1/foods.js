@@ -9,8 +9,13 @@ router.get('/:id', function(req, res, next) {
     }
   })
   .then(food => {
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).send(JSON.stringify(food));
+    if (food) {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(200).send(JSON.stringify(food));
+    } else {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(404).send(JSON.stringify({message: 'Food not found'}));
+    }
   })
   .catch(error => {
     res.setHeader('Content-Type', 'application/json');
