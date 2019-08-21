@@ -32,7 +32,8 @@ describe('api', () => {
 
     test("It won't return a food if the id is invalid", () => {
       return request(app).get('/api/v1/foods/500').then(response => {
-        expect(response.statusCode).toBe(500)
+        expect(response.statusCode).toBe(404)
+        expect(response.body.message).toBe('Food not found')
       })
     })
 
