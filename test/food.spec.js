@@ -1,6 +1,7 @@
 var shell = require('shelljs');
 var request = require("supertest");
 var app = require('../app');
+var Food = require('../models').Food
 
 describe('api', () => {
   beforeAll(() => {
@@ -30,6 +31,13 @@ describe('api', () => {
       })
     });
 
+    test("It won't return a food if the id is invalid", () => {
+      return request(app).get('/api/v1/foods/500').then(response => {
+        expect(response.statusCode).toBe(404)
+        expect(response.body.message).toBe('Food not found')
+      })
+    })
+
     test('It can get all foods from the database', () =>{
       return request(app).get('/api/v1/foods').then(response => {
         expect(response.statusCode).toBe(200)
@@ -52,5 +60,34 @@ describe('api', () => {
           expect(response.body.calories).toBe(100)
         })
     })
+
+    test("It can't create a food in the database if missing parameters", () => {
+      return request(app).post('/api/v1/foods')
+        .send('name=Test')
+        .then(response => {
+          expect(response.statusCode).toBe(500)
+        })
+      })
+
+    test('It can delete an existing food in the database', () => {
+      return Food.create({name: 'Donut', calories: 1000, createdAt: new Date(), updatedAt: new Date()})
+      .then(food => {
+        return request(app).delete(`/api/v1/foods/${food.id}`)
+        .then(response => {
+          expect(response.statusCode).toBe(204)
+        })
+      })
+    })
+
+    test('It can edit a food in the database', () => {
+      return request(app).patch('/api/v1/foods/1')
+        .send({name: 'Test', calories: 100})
+        .then(response => {
+          expect(response.statusCode).toBe(201)
+          expect(response.body.id).toBe(1)
+          expect(response.body.name).toBe('Test')
+          expect(response.body.calories).toBe(100)
+        })
+      })
   });
 });
