@@ -21,5 +21,10 @@
     "babel-jest": "^24.9.0",
     "shelljs": "^0.8.3",
     "supertest": "^4.0.2"
+  },
+  "jest": {
+    "maxConcurrency": 1,
+    "globalSetup": "./test/helper/testGlobalSetup.js",
+    "globalTeardown": "./test/helper/testGlobalTeardown.js"
   }
 }
