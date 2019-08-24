@@ -58,8 +58,13 @@ router.delete('/:id', function(req, res, next) {
     }
   })
   .then(food => {
-    res.setHeader('Content-Type', 'application/json');
-    res.status(204).send();
+    if (food) {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(204).send();
+    } else {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(404).send(JSON.stringify({message: 'Food not found'}));
+    }
   })
   .catch(error => {
     res.setHeader('Content-Type', 'application/json');
@@ -68,20 +73,26 @@ router.delete('/:id', function(req, res, next) {
 });
 
 router.patch('/:id', function (req, res, next) {
- Food.update(
-   {name: req.body.name, calories: req.body.calories},
-   {where: {id: req.params.id}})
- .then(row => {
-   Food.findOne({where: {id: req.params.id}})
-   .then(food => {
-     res.setHeader('Content-Type', 'application/json');
-     res.status(201).send(JSON.stringify(food));
-   })
- })
- .catch(error => {
-   res.setHeader('Content-Type', 'application/json');
-   res.status(500).send({error});
- });
+  Food.findOne({where: {id: req.params.id}})
+  .then(food => {
+    if (food) {
+      food.update({
+        name: req.body.name,
+        calories: req.body.calories
+      })
+      .then(food => {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(201).send(JSON.stringify(food));
+      })
+    } else {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(404).send(JSON.stringify({message: 'Food not found'}));
+    }
+  })
+  .catch(error => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(500).send({error});
+  });
 })
 
 

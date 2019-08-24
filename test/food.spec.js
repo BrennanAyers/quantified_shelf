@@ -78,9 +78,17 @@ describe('api', () => {
         })
     })
 
-    test("It can't create a food in the database if missing parameters", () => {
+    test("It can't create a food in the database if missing calories parameter", () => {
       return request(app).post('/api/v1/foods')
         .send('name=Test')
+        .then(response => {
+          expect(response.statusCode).toBe(500)
+        })
+      })
+
+    test("It can't create a food in the database if missing name parameter", () => {
+      return request(app).post('/api/v1/foods')
+        .send('calories=55')
         .then(response => {
           expect(response.statusCode).toBe(500)
         })
@@ -99,6 +107,14 @@ describe('api', () => {
       })
     })
 
+    test('It can not delete a non-existant food in the database', () => {
+      return request(app).delete(`/api/v1/foods/1`)
+      .then(response => {
+        expect(response.statusCode).toBe(404)
+        expect(response.body.message).toBe('Food not found')
+      })
+    })
+
     test('It can edit a food in the database', () => {
       return Food.create({
         name: 'Banana',
@@ -113,6 +129,15 @@ describe('api', () => {
           expect(response.body.name).toBe('Test')
           expect(response.body.calories).toBe(100)
         })
+      })
+    })
+
+    test('It can not edit a food not in the database', () => {
+      return request(app).patch(`/api/v1/foods/1`)
+      .send({name: 'Test', calories: 100})
+      .then(response => {
+        expect(response.statusCode).toBe(404)
+        expect(response.body.message).toBe('Food not found')
       })
     })
   });
