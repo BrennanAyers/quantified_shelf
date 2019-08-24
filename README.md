@@ -34,6 +34,18 @@ npm start
 ```
 After this, you can make HTTP requests to your localhost using an application like Postman, or directly with cURL if that's your cup of tea.
 
+## Endpoints
+### Foods
+- `GET /api/v1/foods`
+will return all Food resources in the database as a comma separated list of Objects inside of an Array with a 200 status code response.
+- `GET /api/v1/foods/:id`
+will return a single Food resource in the database matching an (integer) ID as a single Object with a 200 status code response.
+- `POST /api/v1/foods`
+- `body: {name: NAME_STRING, calories: CALORIES_INTEGER}` will create a single Food resource in the database using the information provided in the Body. Both Name and Calories are required, and the response will be the newly created Food resource with a 201 status code.
+- `PATCH /api/v1/foods/:id`
+- `body: {name: NAME_STRING, calories: CALORIES_INTEGER}` will update a single Food resource in the database matching an (integer) ID, using the information provided in the Body. Any combination of Name and Calories can be updated at one time, and the response will be the updated Food resource with a 200 status code.
+- `DELETE /api/foods/:id`
+will remove a Food resource in the database matching an (integer) ID and a No Content response with a 204 status code.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
