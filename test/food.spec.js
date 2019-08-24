@@ -107,6 +107,14 @@ describe('api', () => {
       })
     })
 
+    test('It can not delete a non-existant food in the database', () => {
+      return request(app).delete(`/api/v1/foods/1`)
+      .then(response => {
+        expect(response.statusCode).toBe(404)
+        expect(response.body.message).toBe('Food not found')
+      })
+    })
+
     test('It can edit a food in the database', () => {
       return Food.create({
         name: 'Banana',
