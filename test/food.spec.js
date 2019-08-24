@@ -131,5 +131,14 @@ describe('api', () => {
         })
       })
     })
+
+    test('It can not edit a food not in the database', () => {
+      return request(app).patch(`/api/v1/foods/1`)
+      .send({name: 'Test', calories: 100})
+      .then(response => {
+        expect(response.statusCode).toBe(404)
+        expect(response.body.message).toBe('Food not found')
+      })
+    })
   });
 });
