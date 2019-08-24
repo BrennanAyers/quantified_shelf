@@ -58,8 +58,13 @@ router.delete('/:id', function(req, res, next) {
     }
   })
   .then(food => {
-    res.setHeader('Content-Type', 'application/json');
-    res.status(204).send();
+    if (food) {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(204).send();
+    } else {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(404).send(JSON.stringify({message: 'Food not found'}));
+    }
   })
   .catch(error => {
     res.setHeader('Content-Type', 'application/json');
