@@ -4,6 +4,8 @@ var Meal = require('../../../models').Meal
 var Food = require('../../../models').Food
 var MealFood = require('../../../models').MealFood
 
+// var Pojo = require('../../../pojos/mealpojo.js')
+
 router.get('/:id/foods', function(req, res, next) {
   Meal.findByPk(req.params.id,{
     include: [

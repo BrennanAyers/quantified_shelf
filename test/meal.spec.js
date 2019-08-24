@@ -47,7 +47,12 @@ describe('Test Meal paths', () => {
       .then(() => {
         return request(app).get('/api/v1/meals/1/foods').then(response => {
           expect(response.statusCode).toBe(200)
-          return console.log(response.body)
+          expect(response.body.id).toBe(1)
+          expect(response.body.name).toBe('Breakfast')
+          expect(response.body.foods.count).toBe(2)
+          expect(response.body.foods[0].id).toBe(1)
+          expect(response.body.foods[0].name).toBe('Banana')
+          expect(response.body.foods[0].calories).toBe(150)
         })
       })
     })
