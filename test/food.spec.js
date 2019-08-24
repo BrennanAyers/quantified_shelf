@@ -78,9 +78,17 @@ describe('api', () => {
         })
     })
 
-    test("It can't create a food in the database if missing parameters", () => {
+    test("It can't create a food in the database if missing calories parameter", () => {
       return request(app).post('/api/v1/foods')
         .send('name=Test')
+        .then(response => {
+          expect(response.statusCode).toBe(500)
+        })
+      })
+
+    test("It can't create a food in the database if missing name parameter", () => {
+      return request(app).post('/api/v1/foods')
+        .send('calories=55')
         .then(response => {
           expect(response.statusCode).toBe(500)
         })
