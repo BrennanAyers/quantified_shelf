@@ -8,18 +8,12 @@ var MealFood = require('../../../models').MealFood
 
 router.get('/:id/foods', function(req, res, next) {
   Meal.findByPk(req.params.id,{
-    include: [
-      {
-        model: Food,
-        as: 'foods',
-        attributes: ['id', 'name', 'calories']
-      }
-    ]
+    include: 'foods'
   })
   .then(meal => {
     if (meal) {
       res.setHeader('Content-Type', 'application/json');
-      res.status(200).send(JSON.stringify(meal));
+      res.status(200).send(JSON.stringify(meal, ['id', 'name', 'foods', 'id', 'name', 'calories']));
     } else {
       res.setHeader('Content-Type', 'application/json');
       res.status(404).send(JSON.stringify({message: 'Meal not found'}));
