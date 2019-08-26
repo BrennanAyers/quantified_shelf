@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     Food.belongsToMany(models.Meal, {
       through: 'MealFood',
       as: 'meals',
-      foreignKey: 'foodId'
+      foreignKey: 'foodId',
+      otherKey: 'mealId'
     })
   };
   return Food;
