@@ -17,6 +17,10 @@ router.get('/:id/foods', function(req, res, next) {
       res.status(404).send(JSON.stringify({message: 'Meal not found'}));
     }
   })
+  .catch(error => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(500).send({error});
+  });
 })
 
 router.delete('/:mealId/foods/:foodId', function(req, res, next) {
@@ -42,6 +46,10 @@ router.delete('/:mealId/foods/:foodId', function(req, res, next) {
       res.status(404).send(JSON.stringify({message: 'Meal not found'}));
     }
   })
+  .catch(error => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(500).send({error});
+  });
 })
 
 module.exports = router;
