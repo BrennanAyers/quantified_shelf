@@ -19,4 +19,19 @@ router.get('/:id/foods', function(req, res, next) {
   })
 })
 
+router.delete('/:meal_id/foods/:food_id', function(req, res, next) {
+  Meal.findByPk(req.params.meal_id,{
+    include: 'foods'
+  })
+  .then(meal => {
+    if (meal) {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(204).send();
+    } else {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(404).send(JSON.stringify({message: 'Meal not found'}));
+    }
+  })
+})
+
 module.exports = router;
