@@ -63,6 +63,67 @@ describe('api', () =>{
       })
     })
 
+    test('it can get all existing Meals and their Foods', () => {
+      return Meal.bulkCreate([
+        {name: 'Lunch'},
+        {name: 'Dinner'}
+      ])
+      .then(meal => {
+        return Food.bulkCreate([{
+          name: 'Meat',
+          calories: 200
+        },
+        {
+          name: 'Thyme',
+          calories: 10
+        },
+        {
+          name: 'Pasta',
+          calories: 300
+        }])
+        .then(foods => {
+          return MealFood.bulkCreate([{
+            mealId: meal[0].id,
+            foodId: foods[0].id
+          },
+          {
+            mealId: meal[0].id,
+            foodId: foods[1].id
+          },
+          {
+            mealId: meal[1].id,
+            foodId: foods[1].id
+          },
+          {
+            mealId: meal[1].id,
+            foodId: foods[2].id
+          }])
+          .then(mealFoods => {
+            return request(app).get(`/api/v1/meals`)
+            .then(response => {
+              expect(response.body.length).toBe(2)
+              expect(response.body[0].name).toBe('Lunch')
+              expect(response.body[0].foods.length).toBe(2)
+              expect(response.body[0].foods[0].id).toBe(foods[0].id)
+              expect(response.body[0].foods[0].name).toBe('Meat')
+              expect(response.body[0].foods[0].calories).toBe(200)
+              expect(response.body[0].foods[1].id).toBe(foods[1].id)
+              expect(response.body[0].foods[1].name).toBe('Thyme')
+              expect(response.body[0].foods[1].calories).toBe(10)
+              expect(response.body[1].name).toBe('Dinner')
+              expect(response.body[1].foods.length).toBe(2)
+              expect(response.body[1].foods[0].id).toBe(foods[1].id)
+              expect(response.body[1].foods[0].name).toBe('Thyme')
+              expect(response.body[1].foods[0].calories).toBe(10)
+              expect(response.body[1].foods[1].id).toBe(foods[2].id)
+              expect(response.body[1].foods[1].name).toBe('Pasta')
+              expect(response.body[1].foods[1].calories).toBe(300)
+            })
+          })
+        })
+      })
+    })
+
     test('it can delete an associated Food from an existing Meal', () => {
       return Meal.create({
         name: 'Lunch'
