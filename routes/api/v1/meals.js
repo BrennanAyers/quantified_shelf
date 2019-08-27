@@ -23,6 +23,20 @@ router.get('/:id/foods', function(req, res, next) {
   });
 })
 
+router.get('/', function(req, res, next) {
+  Meal.findAll({
+    include: 'foods'
+  })
+  .then(meals => {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(200).send(JSON.stringify(meals, ['id', 'name', 'foods', 'id', 'name', 'calories']));
+  })
+  .catch(error => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(500).send({error});
+  });
+})
+
 router.delete('/:mealId/foods/:foodId', function(req, res, next) {
   Meal.findByPk(req.params.mealId)
   .then(meal => {
