@@ -19,14 +19,24 @@ router.get('/:id/foods', function(req, res, next) {
   })
 })
 
-router.delete('/:meal_id/foods/:food_id', function(req, res, next) {
-  Meal.findByPk(req.params.meal_id,{
-    include: 'foods'
-  })
+router.delete('/:mealId/foods/:foodId', function(req, res, next) {
+  Meal.findByPk(req.params.mealId)
   .then(meal => {
     if (meal) {
-      res.setHeader('Content-Type', 'application/json');
-      res.status(204).send();
+      MealFood.findOne({where: {
+        mealId: req.params.mealId,
+        foodId: req.params.foodId
+      }})
+      .then(mealFood => {
+        if (mealFood) {
+          mealFood.destroy()
+          res.setHeader('Content-Type', 'application/json');
+          res.status(204).send();
+        } else {
+          res.setHeader('Content-Type', 'application/json');
+          res.status(404).send(JSON.stringify({message: 'Food on that Meal not found'}));
+        }
+      })
     } else {
       res.setHeader('Content-Type', 'application/json');
       res.status(404).send(JSON.stringify({message: 'Meal not found'}));
