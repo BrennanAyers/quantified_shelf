@@ -62,5 +62,45 @@ describe('api', () =>{
         })
       })
     })
+
+    test('it can delete an associated Food from an existing Meal', () => {
+      return Meal.create({
+        name: 'Lunch'
+      })
+      .then(meal => {
+        return Food.bulkCreate([{
+          name: 'Meat',
+          calories: 150,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          name: 'Thyme',
+          calories: 14,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }])
+        .then(foods => {
+          return MealFood.bulkCreate([{
+            mealId: meal.id,
+            foodId: foods[0].id,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          },
+          {
+            mealId: meal.id,
+            foodId: foods[1].id,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          }])
+          .then(mealFoods => {
+            return request(app).delete(`/api/v1/meals/${meal.id}/foods/${foods[0].id}`)
+            .then(response => {
+              expect(response.statusCode).toBe(204)
+            })
+          })
+        })
+      })
+    })
   })
 })
