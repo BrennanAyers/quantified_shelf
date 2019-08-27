@@ -80,4 +80,37 @@ router.post('/', function(req, res, next) {
   });
 })
 
+router.post('/:id/foods/:food_id', function(req, res, next) {
+  Meal.findByPk(req.params.id)
+  .then(meal => {
+    if(meal) {
+      return Food.findByPk(req.params.food_id)
+    }
+    else {
+     res.setHeader('Content-Type', 'application/json');
+     res.status(404).send(JSON.stringify({message: 'Meal not found'}));
+   }
+  })
+  .then(food => {
+    if (food) {
+      MealFood.create({
+        foodId: req.params.food_id,
+        mealId: req.params.id
+      })
+    } else {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(404).send(JSON.stringify({message: 'Food not found'}));
+    }
+  })
+  .then(mealFood =>{
+    res.setHeader('Content-Type', 'application/json');
+    res.status(201).send(JSON.stringify(`Successfully added ${food.name} to ${meal.name}`));
+  })
+  .catch(error => {
+    console.log(error)
+    res.setHeader('Content-Type', 'application/json');
+    res.status(500).send({error: error});
+  });
+})
+
 module.exports = router;

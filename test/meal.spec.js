@@ -216,5 +216,29 @@ describe('api', () =>{
           expect(response.body.name).toBe('Breakfast')
         })
     })
+
+    test('it can associate a food with a meal', () => {
+      return Meal.create({
+        id: 1,
+        name: 'Breakfast'
+      })
+      .then(meal => {
+        return Food.create({
+          id: 1,
+          name: 'Banana',
+          calories: 150,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        })
+      })
+      .then(food => {
+        return request(app).post('/api/v1/meals/1/foods/1')
+        .then(response => {
+          console.log(response.body)
+          expect(response.statusCode).toBe(201)
+          expect(response.body.message).toBe('Successfully added Banana to Breakfast')
+        })
+      })
+    })
   })
 })
