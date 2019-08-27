@@ -151,9 +151,8 @@ describe('api', () =>{
         .send({name: 'Breakfast'})
         .then(response => {
           expect(response.statusCode).toBe(201)
-          expect(response.body.id).toBe(1)
+          expect(response.body.id).toBeGreaterThan(0)
           expect(response.body.name).toBe('Breakfast')
-          expect(response.body.foods).toBe([])
         })
     })
   })

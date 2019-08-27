@@ -52,4 +52,18 @@ router.delete('/:mealId/foods/:foodId', function(req, res, next) {
   });
 })
 
+router.post('/', function(req, res, next) {
+  Meal.create({
+    name: req.body.name
+  })
+  .then(meal => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(201).send(JSON.stringify(meal, ['id', 'name']));
+  })
+  .catch(error => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(500).send({error});
+  });
+})
+
 module.exports = router;
