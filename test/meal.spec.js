@@ -70,13 +70,13 @@ describe('api', () =>{
       .then(meal => {
         return Food.bulkCreate([{
           name: 'Meat',
-          calories: 150,
+          calories: 200,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           name: 'Thyme',
-          calories: 14,
+          calories: 10,
           createdAt: new Date(),
           updatedAt: new Date()
         }])
@@ -94,9 +94,31 @@ describe('api', () =>{
             updatedAt: new Date()
           }])
           .then(mealFoods => {
-            return request(app).delete(`/api/v1/meals/${meal.id}/foods/${foods[0].id}`)
+            return request(app).get(`/api/v1/meals/${meal.id}/foods`)
             .then(response => {
-              expect(response.statusCode).toBe(204)
+              expect(response.body.name).toBe('Lunch')
+              expect(response.body.foods.length).toBe(2)
+              expect(response.body.foods[0].id).toBe(foods[0].id)
+              expect(response.body.foods[0].name).toBe('Meat')
+              expect(response.body.foods[0].calories).toBe(200)
+              expect(response.body.foods[1].id).toBe(foods[1].id)
+              expect(response.body.foods[1].name).toBe('Thyme')
+              expect(response.body.foods[1].calories).toBe(10)
+              return request(app).delete(`/api/v1/meals/${meal.id}/foods/${foods[0].id}`)
+              .then(response => {
+                expect(response.statusCode).toBe(204)
+                return request(app).get(`/api/v1/meals/${meal.id}/foods/`)
+                .then(response => {
+                  expect(response.body.name).toBe('Lunch')
+                  expect(response.body.foods.length).toBe(1)
+                  expect(response.body.foods[0].id).not.toBe(foods[0].id)
+                  expect(response.body.foods[0].name).not.toBe('Meat')
+                  expect(response.body.foods[0].calories).not.toBe(200)
+                  expect(response.body.foods[0].id).toBe(foods[1].id)
+                  expect(response.body.foods[0].name).toBe('Thyme')
+                  expect(response.body.foods[0].calories).toBe(10)
+                })
+              })
             })
           })
         })
