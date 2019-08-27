@@ -124,5 +124,26 @@ describe('api', () =>{
         })
       })
     })
+
+    test('it can not delete an associated Food from a non-existent Meal', () => {
+      return request(app).delete(`/api/v1/meals/1/foods/1`)
+      .then(response => {
+        expect(response.statusCode).toBe(404)
+        expect(response.body.message).toBe('Meal not found')
+      })
+    })
+
+    test('it can not delete a not associated Food from an existing Meal', () => {
+      return Meal.create({
+        name: 'Lunch'
+      })
+      .then(meal => {
+        return request(app).delete(`/api/v1/meals/${meal.id}/foods/1`)
+        .then(response => {
+          expect(response.statusCode).toBe(404)
+          expect(response.body.message).toBe('Food on that Meal not found')
+        })
+      })
+    })
   })
 })
