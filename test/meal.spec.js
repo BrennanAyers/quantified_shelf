@@ -206,5 +206,15 @@ describe('api', () =>{
         })
       })
     })
+
+    test('it can create a meal on the database', () => {
+      return request(app).post('/api/v1/meals')
+        .send({name: 'Breakfast'})
+        .then(response => {
+          expect(response.statusCode).toBe(201)
+          expect(response.body.id).toBeGreaterThan(0)
+          expect(response.body.name).toBe('Breakfast')
+        })
+    })
   })
 })
