@@ -5,6 +5,9 @@ Quantified Shelf is a Node.js application, using the Express framework, that kee
 The quantified self refers both to the cultural phenomenon of self-tracking with technology and to a community of users and makers of self-tracking tools who share an interest in “self-knowledge through numbers.”
 ```
 
+## Production Link
+We host [Quantified Shelf](https://quantified-shelf.herokuapp.com/) on Heroku.
+
 ## Installation
 
 Quantified Shelf uses the [Node Package Manager](http://npmjs.com) to manage dependencies. The instructions to run the application locally are below.
@@ -59,7 +62,30 @@ will associated a Food resource that already exists, with a Meal resource that a
 - `DELETE /api/v1/meals/:meal_id/foods/:food_id`
 will remove an already associated Food with an already existing Meal in our Database. This will remove any record of the two being linked, but will not change the Meal or Food resources themselves. The response will be a No Content with a 204 status code.
 
+## Testing
+Quantified Shelf uses the Jest testing framework. For ease of use, an NPM script is included:
+`npm test`
+The test suite will create, migrate, and clean a test database on every run, and does not require any user intervention.
+Current code coverage is at 83.13%.
+
+## Known Issues
+- Jest does not exist gracefully, requiring the `--forceExit` flag to end running the test suites
+- Food and Meal resources can be duplicated, as `name` values are not currently unique
+- Food and Meal resources are not formatted to a consistent standard (`name` capitalization, `calories` rounded to integers)
+
+## Tech Stack
+- Javascript
+- Express
+- Sequelize
+- Postgres
+- Jest
+- DotENV
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
+
+## Core Contributors
+[Trevor Nodland](https://github.com/tnodland)
+[Brennan Ayers](https://github.com/BrennanAyers)
